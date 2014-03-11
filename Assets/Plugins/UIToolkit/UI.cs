@@ -106,15 +106,20 @@ public class UI : MonoBehaviour
 		
 		// grab all our child UIToolkits
 		_toolkitInstances = GetComponentsInChildren<UIToolkit>();
-		firstToolkit = _toolkitInstances[0];
+
+		// Check length to avoid exceptions since we are using UI.cs only for determining the scaleFactor.
+		if (_toolkitInstances != null && _toolkitInstances.Length > 0) {
+
+			firstToolkit = _toolkitInstances[0];
 #if UNITY_EDITOR
-		if( _toolkitInstances.Length == 0 )
-			throw new System.Exception( "Could not find any UIToolkit instances in children of UI" );
+			if( _toolkitInstances.Length == 0 )
+				throw new System.Exception( "Could not find any UIToolkit instances in children of UI" );
 #endif
-		
-		// kick off the loading of texture for any UIToolkits we have
-		foreach( var toolkit in _toolkitInstances )
-			toolkit.loadTextureAndPrepareForUse();
+			
+			// kick off the loading of texture for any UIToolkits we have
+			foreach( var toolkit in _toolkitInstances )
+				toolkit.loadTextureAndPrepareForUse();
+		}
 	}
 	
 	

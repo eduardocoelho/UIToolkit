@@ -348,7 +348,7 @@ public class UISlice9 : UITouchableSprite
 
 
 	// Touch handlers
-	public override void onTouchBegan( Touch touch, Vector2 touchPos )
+	public override void onTouchBegan( UITouchWrapper touch, Vector2 touchPos )
 	{
 		highlighted = true;
 		
@@ -362,7 +362,7 @@ public class UISlice9 : UITouchableSprite
 	}
 
 
-	public override void onTouchEnded( Touch touch, Vector2 touchPos, bool touchWasInsideTouchFrame )
+	public override void onTouchEnded( UITouchWrapper touch, Vector2 touchPos, bool touchWasInsideTouchFrame )
 	{
 		// If someone has un-highlighted us through code we are deactivated 
 		// and should not fire the event
