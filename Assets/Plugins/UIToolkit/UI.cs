@@ -29,7 +29,12 @@ public class UI : MonoBehaviour
 	
 	public static bool isHD = false;
 	public static int scaleFactor = 1; // we use int's for ease of life. this allows enough flexibility (1x, 2x, 3x, etc) and keeps things simple
-	public string hdExtension = "2x";
+
+	static string _hdExtension = "2x";
+	public string hdExtension {
+		get { return _hdExtension; }
+		set { _hdExtension = value; }
+	}
 
 	public static bool isScaleFactorCalculated;
 
@@ -97,7 +102,7 @@ public class UI : MonoBehaviour
 #endif
 					isHD = true;
 					scaleFactor = 4;
-					hdExtension = "4x";
+					_hdExtension = "4x";
 				}
 				// are we loading up a 2x texture?
 				else if( Screen.width >= maxWidthOrHeightForSD || Screen.height >= maxWidthOrHeightForSD )
