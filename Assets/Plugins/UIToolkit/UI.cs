@@ -30,7 +30,8 @@ public class UI : MonoBehaviour
 	public static bool isHD = false;
 	public static int scaleFactor = 1; // we use int's for ease of life. this allows enough flexibility (1x, 2x, 3x, etc) and keeps things simple
 	public string hdExtension = "2x";
-	
+
+	public static bool isScaleFactorCalculated;
 
 	#region Unity MonoBehaviour Functions
 	
@@ -73,40 +74,48 @@ public class UI : MonoBehaviour
 				break;
 			}
 		}
-		
-		// setup the HD flag
-		// handle texture loading if required
+
+		//
+		// Ensure the scalefactor is calculated only once in the whole application lifecycle.
+		if (!isScaleFactorCalculated) {
+			isScaleFactorCalculated = true;
+
+			// setup the HD flag
+			// handle texture loading if required
 #if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_WEBPLAYER || UNITY_ANDROID || UNITY_STANDALONE_LINUX
-		var deviceAllowsHD = true;
+			var deviceAllowsHD = true;
 #else
-		var deviceAllowsHD = ( allowPod4GenHD && iPhone.generation == iPhoneGeneration.iPodTouch4Gen ) || iPhone.generation != iPhoneGeneration.iPodTouch4Gen;
+			var deviceAllowsHD = ( allowPod4GenHD && iPhone.generation == iPhoneGeneration.iPodTouch4Gen ) || iPhone.generation != iPhoneGeneration.iPodTouch4Gen;
 #endif
-		if( autoTextureSelectionForHD && deviceAllowsHD )
-		{
-			// are we loading up a 4x texture?
-			if( Screen.width >= maxWidthOrHeightForHD || Screen.height >= maxWidthOrHeightForHD )
+			if( autoTextureSelectionForHD && deviceAllowsHD )
 			{
+				// are we loading up a 4x texture?
+				if( Screen.width >= maxWidthOrHeightForHD || Screen.height >= maxWidthOrHeightForHD )
+				{
 #if UNITY_EDITOR
-				Debug.Log( "switching to 4x GUI texture" );
+					Debug.Log( "switching to 4x GUI texture" );
 #endif
-				isHD = true;
-				scaleFactor = 4;
-				hdExtension = "4x";
-			}
-			// are we loading up a 2x texture?
-			else if( Screen.width >= maxWidthOrHeightForSD || Screen.height >= maxWidthOrHeightForSD )
-			{
+					isHD = true;
+					scaleFactor = 4;
+					hdExtension = "4x";
+				}
+				// are we loading up a 2x texture?
+				else if( Screen.width >= maxWidthOrHeightForSD || Screen.height >= maxWidthOrHeightForSD )
+				{
 #if UNITY_EDITOR
-				Debug.Log( "switching to 2x GUI texture" );
+					Debug.Log( "switching to 2x GUI texture" );
 #endif
-				isHD = true;
-				scaleFactor = 2;
+					isHD = true;
+					scaleFactor = 2;
+				}
 			}
 		}
-		
+
+
 		// grab all our child UIToolkits
 		_toolkitInstances = GetComponentsInChildren<UIToolkit>();
 
+		//
 		// Check length to avoid exceptions since we are using UI.cs only for determining the scaleFactor.
 		if (_toolkitInstances != null && _toolkitInstances.Length > 0) {
 
